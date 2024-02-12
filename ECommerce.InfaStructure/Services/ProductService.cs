@@ -121,7 +121,7 @@ namespace ECommerce.InfaStructure.Services
             throw new Exception("Product with Id: " + ProductId.ToString() + "Doesn't have a descound amount or original price");
         }
 
-        public async Task UpdateProductDetails(ProductDtoIn Product, Guid Id)
+        public async Task UpdateProductDetails(ProductDtoForUpdate Product, Guid Id)
         {
             var DbProduct = await _context.Products.FindAsync(Id);
             if (DbProduct == null)

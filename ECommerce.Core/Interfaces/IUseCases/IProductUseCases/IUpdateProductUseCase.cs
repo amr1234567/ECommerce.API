@@ -4,6 +4,6 @@ namespace ECommerce.Core.Interfaces.IUseCases.IProductUseCases
 {
     public interface IUpdateProductUseCase
     {
-        Task Execute(ProductDtoIn product, Guid Id);
+        Task Execute(ProductDtoForUpdate product, Guid Id);
     }
 }

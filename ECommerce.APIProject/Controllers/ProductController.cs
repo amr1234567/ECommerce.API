@@ -1,4 +1,6 @@
-﻿using ECommerce.Core.DTO.ForEndUser;
+﻿using ECommerce.APIProject.Config;
+using ECommerce.Core.DTO.ForDB;
+using ECommerce.Core.DTO.ForEndUser;
 using ECommerce.Core.Entities;
 using ECommerce.Core.Interfaces.IUseCases.IProductUseCases;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +45,8 @@ namespace ECommerce.APIProject.Controllers
             _removeDescound = removeDescound;
             _makeDescound = makeDescound;
         }
+
+
         // GET: api/<ProductController>
         [HttpGet("products")]
         public async Task<ActionResult<List<ProductDtoOut>>> GetProducts()
@@ -52,6 +56,7 @@ namespace ECommerce.APIProject.Controllers
                 return Ok(new List<ProductDtoOut>());
             return Ok(products);
         }
+
 
         [HttpGet("products/{categoryId}")]
         public async Task<ActionResult<List<ProductDtoOut>>> GetProductsByCategoryId(string categoryId)
@@ -64,6 +69,7 @@ namespace ECommerce.APIProject.Controllers
                 return Ok(new List<ProductDtoOut>());
             return Ok(products);
         }
+
 
         [HttpGet("products/filter")]
         public async Task<ActionResult<List<ProductDtoOut>>> GetProducts(
@@ -88,30 +94,83 @@ namespace ECommerce.APIProject.Controllers
             return Ok(products);
         }
 
+
         // GET api/<ProductController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("product/{ProductId}")]
+        public async Task<ActionResult<ProductDtoOut>> GetProductById(string ProductId)
         {
-            return "value";
+            bool checkGuidValidat = Guid.TryParse(ProductId, out Guid result);
+            if (!checkGuidValidat)
+                return BadRequest($"Bad input -Guid : {ProductId} not valid- ");
+            var product = await _getProductById.Execute(result);
+            if (product == null)
+                return NotFound("Product with id : " + ProductId + " Can't Be Found");
+            return Ok(product);
         }
+
 
 
         // POST api/<ProductController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("/product")]
+        public async Task<ActionResult> AddProduct([FromBody] ProductDtoIn productIn)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            await _addProduct.Execute(productIn);
+            return Ok("Product Added Successfully");
         }
+
 
         // PUT api/<ProductController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("product/{ProductId}")]
+        public async Task<ActionResult> UpdateProduct(string ProductId, [FromBody] ProductDtoForUpdate productForUpdating)
         {
+            bool checkGuidValidat = Guid.TryParse(ProductId, out Guid result);
+            if (!checkGuidValidat)
+                return BadRequest($"Bad input -Guid : {ProductId} not valid- ");
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+            await _updateProduct.Execute(productForUpdating, result);
+            return Ok("Product Has Been Updated");
         }
 
+
         // DELETE api/<ProductController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("product/{ProductId}")]
+        public async Task<ActionResult> DeleteProduct(string ProductId)
         {
+            bool checkGuidValidat = Guid.TryParse(ProductId, out Guid result);
+            if (!checkGuidValidat)
+                return BadRequest($"Bad input -Guid : {ProductId} not valid- ");
+            await _deleteProduct.Execute(result);
+            return Ok("Product Has Been Deleted");
+        }
+
+
+        [HttpPost("AddDescound/{productId}")]
+        public async Task<ActionResult> AddDescound(string productId, [FromBody] double amount)
+        {
+            bool checkGuidValidat = Guid.TryParse(productId, out Guid Id);
+            if (!checkGuidValidat)
+                return BadRequest($"Bad input -Guid : {productId} not valid- ");
+            _removeDescound.Execute(Id);
+            var check = double.TryParse(amount.ToString(), out double AmountInDouble);
+            if (!check)
+                return BadRequest("Not a number");
+            _makeDescound.Execute(Id, AmountInDouble);
+            return Ok("Done ");
+        }
+
+
+        [HttpPost("DeleteDescound/{productId}")]
+        public async Task<ActionResult> DeleteDescound(string productId)
+        {
+            bool checkGuidValidat = Guid.TryParse(productId, out Guid Id);
+            if (!checkGuidValidat)
+                return BadRequest($"Bad input -Guid : {productId} not valid- ");
+            
+            _removeDescound.Execute(Id);
+            return Ok("Done ");
         }
     }
 }

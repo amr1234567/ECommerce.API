@@ -18,7 +18,7 @@ namespace ECommerce.Core.Interfaces.IServices
         Task DeleteProduct(Guid Id);
         Task MakeDiscound(Guid ProductId,double DiscoundAmount);
         Task RemoveDiscound(Guid ProductId);
-        Task UpdateProductDetails(ProductDtoIn Product, Guid Id);
+        Task UpdateProductDetails(ProductDtoForUpdate Product, Guid Id);
         Task AddProduct(ProductDtoIn Product);
     }
 }

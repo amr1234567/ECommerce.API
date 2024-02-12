@@ -18,7 +18,7 @@ namespace ECommerce.InfaStructure.UseCases.ProductUseCases
             _productService = productService;
         }
 
-        public async Task Execute(ProductDtoIn product, Guid Id)
+        public async Task Execute(ProductDtoForUpdate product, Guid Id)
         {
             await _productService.UpdateProductDetails(product, Id);
         }

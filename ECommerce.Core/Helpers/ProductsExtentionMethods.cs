@@ -12,20 +12,29 @@ namespace ECommerce.Core.Helpers
     {
         public static void UpdateProductDetails(this Product Originalproduct ,Product newProduct)
         {
-            Originalproduct.Quentity = newProduct.Quentity;
-            Originalproduct.Picture = newProduct.Picture;
-            Originalproduct.Price = newProduct.Price;
-            Originalproduct.CategoryId = newProduct.CategoryId;
-            Originalproduct.Description = newProduct.Description;
+            Originalproduct.Quentity = (newProduct.Quentity == null || newProduct.Quentity == 0) ? Originalproduct.Quentity : Originalproduct.Quentity;
+            Originalproduct.Picture = (newProduct.Picture == null) ? Originalproduct.Picture : Originalproduct.Picture;
+            Originalproduct.Price = (newProduct.Price == null || newProduct.Price == 0) ? Originalproduct.Price : Originalproduct.Price;
+            Originalproduct.CategoryId = (Guid.TryParse(newProduct.CategoryId.ToString(), out _)) ? Originalproduct.CategoryId : Originalproduct.CategoryId;
+            Originalproduct.Description = (string.IsNullOrEmpty(newProduct.Description)) ? Originalproduct.Description : newProduct.Description;
         }
 
         public static void UpdateProductDetails(this Product Originalproduct, ProductDtoIn newProduct)
         {
-            Originalproduct.Quentity = newProduct.Quentity;
-            Originalproduct.Picture = newProduct.Picture;
-            Originalproduct.Price = newProduct.Price;
-            Originalproduct.CategoryId = newProduct.CategoryId;
-            Originalproduct.Description = newProduct.Description;
+            Originalproduct.Quentity = (newProduct.Quentity == null || newProduct.Quentity == 0) ? Originalproduct.Quentity : Originalproduct.Quentity;
+            Originalproduct.Picture = (newProduct.Picture == null) ? Originalproduct.Picture : Originalproduct.Picture;
+            Originalproduct.Price = (newProduct.Price == null || newProduct.Price == 0) ? Originalproduct.Price : Originalproduct.Price;
+            Originalproduct.CategoryId = (Guid.TryParse(newProduct.CategoryId.ToString(), out _)) ? Originalproduct.CategoryId : Originalproduct.CategoryId;
+            Originalproduct.Description = (string.IsNullOrEmpty(newProduct.Description)) ? Originalproduct.Description : newProduct.Description;
+        }
+
+        public static void UpdateProductDetails(this Product Originalproduct, ProductDtoForUpdate newProduct)
+        {
+            Originalproduct.Quentity = (newProduct.Quentity == null || newProduct.Quentity == 0) ? Originalproduct.Quentity : Originalproduct.Quentity;
+            Originalproduct.Picture = (newProduct.Picture == null) ? Originalproduct.Picture : Originalproduct.Picture;
+            Originalproduct.Price = (newProduct.Price == null || newProduct.Price == 0) ? Originalproduct.Price : Originalproduct.Price;
+            Originalproduct.CategoryId = (Guid.TryParse(newProduct.CategoryId.ToString(), out _)) ? Originalproduct.CategoryId : Originalproduct.CategoryId;
+            Originalproduct.Description = (string.IsNullOrEmpty(newProduct.Description)) ? Originalproduct.Description : newProduct.Description;
         }
     }
 }

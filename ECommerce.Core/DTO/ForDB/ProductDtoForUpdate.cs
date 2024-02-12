@@ -6,12 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Core.DTO.ForEndUser
+namespace ECommerce.Core.DTO.ForDB
 {
-    public class ProductDtoOut
+    public class ProductDtoForUpdate
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
 
         public string? Description { get; set; }
@@ -20,32 +18,28 @@ namespace ECommerce.Core.DTO.ForEndUser
 
         public int Quentity { get; set; }
 
-        public double? Discound { get; set; }
-
         public Guid? CategoryId { get; set; }
-
-        public double? OriginalPrice { get; set; }
 
         public byte[]? Picture { get; set; }
 
+        public Product ToProduct()
+        {
+            return new Product()
+            {
+                Name = Name,
+                Description = Description,
+                CategoryId = CategoryId,
+                Picture = Picture,
+                Quentity = Quentity
+            };
+        }
         public void ToProductDto(Product product)
         {
-            Id = product.Id;
             Name = product.Name;
             Description = product.Description;
             CategoryId = product.CategoryId;
             Picture = product.Picture;
             Quentity = product.Quentity;
-            Discound = product.Discound;
-            OriginalPrice = product.OriginalPrice;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-            var product = obj as ProductDtoOut;
-            return Id.Equals(product?.Id);
         }
     }
 }
