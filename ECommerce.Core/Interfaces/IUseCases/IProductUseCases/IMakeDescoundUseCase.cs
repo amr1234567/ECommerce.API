@@ -2,6 +2,6 @@
 {
     public interface IMakeDescoundUseCase
     {
-        void Execute(Guid ProductId, double Discound);
+        Task Execute(Guid ProductId, double Discound);
     }
 }

@@ -38,14 +38,8 @@ namespace ECommerce.Core.DTO.ForEndUser
             Quentity = product.Quentity;
             Discound = product.Discound;
             OriginalPrice = product.OriginalPrice;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-            var product = obj as ProductDtoOut;
-            return Id.Equals(product?.Id);
+            Price = product.Price;
+            
         }
     }
 }

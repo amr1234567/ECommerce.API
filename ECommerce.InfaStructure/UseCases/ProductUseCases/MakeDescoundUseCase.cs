@@ -17,7 +17,7 @@ namespace ECommerce.InfaStructure.UseCases.ProductUseCases
             _productService = productService;
         }
 
-        public async void Execute(Guid ProductId, double Discound)
+        public async Task Execute(Guid ProductId, double Discound)
         {
             await _productService.MakeDiscound(ProductId, Discound);
         }

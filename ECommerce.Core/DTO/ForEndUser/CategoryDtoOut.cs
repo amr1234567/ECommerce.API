@@ -20,14 +20,5 @@ namespace ECommerce.Core.DTO.ForEndUser
             Name = category.Name;
             Description = category.Description;
         }
-        public override bool Equals(object? obj)
-        {
-            if (obj == null)
-                return false;
-            if (GetType() != obj.GetType())
-                return false;
-            var category = obj as CategoryDtoOut;
-            return Id.Equals(category?.Id);
-        }
     }
 }

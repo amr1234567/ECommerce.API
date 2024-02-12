@@ -10,13 +10,13 @@ namespace ECommerce.Core.DTO.ForDB
 {
     public class ProductDtoForUpdate
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public string? Description { get; set; }
 
-        public double Price { get; set; }
+        public double? Price { get; set; }
 
-        public int Quentity { get; set; }
+        public int? Quentity { get; set; }
 
         public Guid? CategoryId { get; set; }
 
@@ -30,7 +30,7 @@ namespace ECommerce.Core.DTO.ForDB
                 Description = Description,
                 CategoryId = CategoryId,
                 Picture = Picture,
-                Quentity = Quentity
+                Quentity = (int)Quentity
             };
         }
         public void ToProductDto(Product product)

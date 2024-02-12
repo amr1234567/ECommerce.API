@@ -153,11 +153,11 @@ namespace ECommerce.APIProject.Controllers
             bool checkGuidValidat = Guid.TryParse(productId, out Guid Id);
             if (!checkGuidValidat)
                 return BadRequest($"Bad input -Guid : {productId} not valid- ");
-            _removeDescound.Execute(Id);
+            await _removeDescound.Execute(Id);
             var check = double.TryParse(amount.ToString(), out double AmountInDouble);
             if (!check)
                 return BadRequest("Not a number");
-            _makeDescound.Execute(Id, AmountInDouble);
+            await _makeDescound.Execute(Id, AmountInDouble);
             return Ok("Done ");
         }
 
@@ -169,7 +169,7 @@ namespace ECommerce.APIProject.Controllers
             if (!checkGuidValidat)
                 return BadRequest($"Bad input -Guid : {productId} not valid- ");
             
-            _removeDescound.Execute(Id);
+            await _removeDescound.Execute(Id);
             return Ok("Done ");
         }
     }

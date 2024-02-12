@@ -2,6 +2,6 @@
 {
     public interface IRemoveDescoundUseCase
     {
-        void Execute(Guid ProductId);
+        Task Execute(Guid ProductId);
     }
 }

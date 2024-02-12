@@ -94,14 +94,17 @@ namespace ECommerce.InfaStructure.Services
         {
             if (DiscoundAmount < 0 || DiscoundAmount > 100)
                 throw new ArgumentOutOfRangeException("Discound must be between 0 and 100");
-            var Product = await _context.Products.FindAsync(ProductId);
+            
+            var Product = await _context.Products.FirstOrDefaultAsync(p => p.Id.Equals(ProductId));
             if (Product == null)
                 throw new Exception("Can't Find Product with Id : " + ProductId.ToString());
+            
             Product.Discound = DiscoundAmount;
             Product.OriginalPrice = Product.Price;
-            Product.Price -= DiscoundAmount * Product.Price;
+            Product.Price -= (DiscoundAmount / 100) * Product.Price;
             _context.Products.Update(Product);
             await _context.SaveChangesAsync();
+
         }
 
         public async Task RemoveDiscound(Guid ProductId)
@@ -116,9 +119,8 @@ namespace ECommerce.InfaStructure.Services
                 Product.Discound = 0;
                 _context.Products.Update(Product);
                 await _context.SaveChangesAsync();
-                return;
             }
-            throw new Exception("Product with Id: " + ProductId.ToString() + "Doesn't have a descound amount or original price");
+
         }
 
         public async Task UpdateProductDetails(ProductDtoForUpdate Product, Guid Id)

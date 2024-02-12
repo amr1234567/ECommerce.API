@@ -17,7 +17,7 @@ namespace ECommerce.InfaStructure.UseCases.ProductUseCases
             _productService = productService;
         }
 
-        public async void Execute(Guid ProductId)
+        public async Task Execute(Guid ProductId)
         {
             await _productService.RemoveDiscound(ProductId);
         }
