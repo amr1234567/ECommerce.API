@@ -6,6 +6,6 @@ namespace ECommerce.Core.Interfaces.IUseCases.ICategoryUseCases
 {
     public interface IGetCategoriesByFiltersUseCase
     {
-        Task<IEnumerable<CategoryDtoOut>> Execute(params Func<bool, IEnumerable<Category>>[] filters);
+        Task<IEnumerable<CategoryDtoOut>> Execute(params Func<Category, bool>[] filters);
     }
 }

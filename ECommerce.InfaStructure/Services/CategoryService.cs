@@ -42,32 +42,20 @@ namespace ECommerce.InfaStructure.Services
 
         public async Task<List<CategoryDtoOut>> GetCategories()
         {
-            var ListCategory = new List<CategoryDtoOut>();
-            foreach(var category in await _context.Categories.ToListAsync())
-            {
-                var categoryDto = new CategoryDtoOut();
-                categoryDto.ToCategoryDto(category);
-                ListCategory.Add(categoryDto);
-            }
-            return ListCategory;
+            var ListCategory = await _context.Categories.ToListAsync();
+            
+            return ListCategory.ConvertCategoriesToDto();
         }
 
         public async Task<List<CategoryDtoOut>> GetCategoriesByFilters(params Func<Category, bool>[] filters)
         {
             if (filters == null || filters.Length == 0)
                 return null;
-            var Categories = _context.Categories;
+            var Categories = await _context.Categories.ToListAsync();
             foreach (var filter in filters)
-                Categories.Where(filter);
+                Categories = Categories.Where(filter).ToList();
 
-            var ListCategory = new List<CategoryDtoOut>();
-            foreach (var category in await Categories.ToListAsync())
-            {
-                var categoryDto = new CategoryDtoOut();
-                categoryDto.ToCategoryDto(category);
-                ListCategory.Add(categoryDto);
-            }
-            return ListCategory;
+            return Categories.ConvertCategoriesToDto();
         }
 
         public async Task<CategoryDtoOut> GetCategoryById(Guid Id)
@@ -80,7 +68,7 @@ namespace ECommerce.InfaStructure.Services
             return CategoryDto;
         }
 
-        public async Task UpdateCategoryDetails(CategoryDtoIn category, Guid Id)
+        public async Task UpdateCategoryDetails(CategoryDtoForUpdate category, Guid Id)
         {
             var Category = await _context.Categories.FirstOrDefaultAsync(c => c.Id.Equals(Id));
             if(Category == null)

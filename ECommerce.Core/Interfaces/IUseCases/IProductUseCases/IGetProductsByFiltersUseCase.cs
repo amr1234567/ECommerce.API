@@ -6,6 +6,6 @@ namespace ECommerce.Core.Interfaces.IUseCases.IProductUseCases
 {
     public interface IGetProductsByFiltersUseCase
     {
-        Task<IEnumerable<ProductDtoOut>> Execute(params Func<bool, IEnumerable<Product>>[] filters);
+        Task<IEnumerable<ProductDtoOut>> Execute(params Func<Product, bool>[] filters);
     }
 }

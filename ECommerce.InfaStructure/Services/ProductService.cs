@@ -84,7 +84,10 @@ namespace ECommerce.InfaStructure.Services
             }
             if (products == null)
                 return null;
-            return products.ConvertProductsToDto();
+
+            var ProductsDto = products.ConvertProductsToDto();
+            ProductsDto = ProductsDto.Distinct().ToList();
+            return ProductsDto;
         }
 
         public async Task MakeDiscound(Guid ProductId, double DiscoundAmount)

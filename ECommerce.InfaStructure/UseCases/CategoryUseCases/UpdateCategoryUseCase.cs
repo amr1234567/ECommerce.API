@@ -18,7 +18,7 @@ namespace ECommerce.InfaStructure.UseCases.CategoryUseCases
             _categoryService = categoryService;
         }
 
-        public async Task Execute(CategoryDtoIn category, Guid CategoryId)
+        public async Task Execute(CategoryDtoForUpdate category, Guid CategoryId)
         {
             await _categoryService.UpdateCategoryDetails(category, CategoryId);
         }

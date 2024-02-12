@@ -15,7 +15,7 @@ namespace ECommerce.Core.Interfaces.IServices
         Task<List<CategoryDtoOut>> GetCategories();
         Task<List<CategoryDtoOut>> GetCategoriesByFilters(params Func<Category, bool>[] filters);
         Task DeleteCategory(Guid Id);
-        Task UpdateCategoryDetails(CategoryDtoIn category, Guid Id);
+        Task UpdateCategoryDetails(CategoryDtoForUpdate category, Guid Id);
         Task AddCategory(CategoryDtoIn category);
     }
 }

@@ -20,7 +20,7 @@ namespace ECommerce.InfaStructure.UseCases.CategoryUseCases
             this.categoryService = categoryService;
         }
 
-        public async Task<IEnumerable<CategoryDtoOut>> Execute(params Func<bool, IEnumerable<Category>>[] filters)
+        public async Task<IEnumerable<CategoryDtoOut>> Execute(params Func<Category, bool>[] filters)
         {
             return await categoryService.GetCategoriesByFilters(filters);
         }

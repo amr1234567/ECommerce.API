@@ -20,7 +20,7 @@ namespace ECommerce.InfaStructure.UseCases.ProductUseCases
             _productService = productService;
         }
 
-        public async Task<IEnumerable<ProductDtoOut>> Execute(params Func<bool, IEnumerable<Product>>[] filters)
+        public async Task<IEnumerable<ProductDtoOut>> Execute(params Func<Product, bool>[] filters)
         {
             return await _productService.GetProductsByFilters(filters);
         }

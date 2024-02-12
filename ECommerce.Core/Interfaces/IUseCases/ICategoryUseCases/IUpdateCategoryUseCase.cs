@@ -4,6 +4,6 @@ namespace ECommerce.Core.Interfaces.IUseCases.ICategoryUseCases
 {
     public interface IUpdateCategoryUseCase
     {
-        Task Execute(CategoryDtoIn category, Guid CategoryId);
+        Task Execute(CategoryDtoForUpdate category, Guid CategoryId);
     }
 }

@@ -12,14 +12,20 @@ namespace ECommerce.Core.Helpers
     {
         public static void UpdateDataCategory(this Category OriginalCategory, Category NewCategory)
         {
-            OriginalCategory.Description = NewCategory.Description;
-            OriginalCategory.Name = NewCategory.Name;
+            OriginalCategory.Description = string.IsNullOrEmpty(NewCategory.Description) ? OriginalCategory.Description : NewCategory.Description;
+            OriginalCategory.Name = string.IsNullOrEmpty(NewCategory.Name) ? OriginalCategory.Name : NewCategory.Name;
         }
 
         public static void UpdateDataCategory(this Category OriginalCategory, CategoryDtoIn NewCategory)
         {
-            OriginalCategory.Description = NewCategory.Description;
-            OriginalCategory.Name = NewCategory.Name;
+            OriginalCategory.Description = string.IsNullOrEmpty(NewCategory.Description) ? OriginalCategory.Description: NewCategory.Description;
+            OriginalCategory.Name = string.IsNullOrEmpty(NewCategory.Name) ? OriginalCategory.Name : NewCategory.Name;
+        }
+
+        public static void UpdateDataCategory(this Category OriginalCategory, CategoryDtoForUpdate NewCategory)
+        {
+            OriginalCategory.Description = string.IsNullOrEmpty(NewCategory.Description) ? OriginalCategory.Description : NewCategory.Description;
+            OriginalCategory.Name = string.IsNullOrEmpty(NewCategory.Name) ? OriginalCategory.Name : NewCategory.Name;
         }
     }
 }

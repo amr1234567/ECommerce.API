@@ -23,5 +23,17 @@ namespace ECommerce.Core.Helpers
             }
             return products;
         }
+        public static List<CategoryDtoOut> ConvertCategoriesToDto(this List<Category> list)
+        {
+            var Categories = new List<CategoryDtoOut>();
+
+            foreach (var category in list)
+            {
+                var ProductDto = new CategoryDtoOut();
+                ProductDto.ToCategoryDto(category);
+                Categories.Add(ProductDto);
+            }
+            return Categories;
+        }
     }
 }
