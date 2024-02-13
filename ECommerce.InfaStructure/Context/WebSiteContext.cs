@@ -1,6 +1,7 @@
 ﻿using ECommerce.Core.Constants;
 using ECommerce.Core.Entities;
 using ECommerce.Core.Entities.Identity;
+using ECommerce.InfaStructure.DBConfiguration;
 using ECommerce.InfaStructure.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -19,18 +20,17 @@ namespace ECommerce.InfaStructure.Context
         {
         }
 
-
-
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Address> Addresses  { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //Note : As always the data in seeding functions is constant, it will never be added
+            builder.SeedWithData();
 
-            builder.SeedCategories();
-            builder.SeedProducts();
-            builder.SeedRoles();
+            builder.RenameTables();
+            builder.ModifyTables();
 
             base.OnModelCreating(builder);
         }

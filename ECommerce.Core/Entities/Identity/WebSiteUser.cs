@@ -13,7 +13,7 @@ namespace ECommerce.Core.Entities.Identity
         public byte[]? ImageProfile { get; set; }
         
         [ForeignKey(nameof(Address))]
-        public Guid AddressId { get; set; }
-        public virtual Address Address { get; set; }
+        public Guid? AddressId { get; set; }
+        public virtual Address? Address { get; set; }
     }
 }

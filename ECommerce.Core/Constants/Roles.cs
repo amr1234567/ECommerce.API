@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Core.Constants
 {
-    public enum Roles
+    public class Roles
     {
-        User,
-        Admin
+        public const string Admin = "Admin";
+        public const string User = "User";
     }
 }

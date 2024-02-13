@@ -1,8 +1,10 @@
 ﻿using ECommerce.APIProject.Config;
+using ECommerce.Core.Constants;
 using ECommerce.Core.DTO.ForDB;
 using ECommerce.Core.DTO.ForEndUser;
 using ECommerce.Core.Entities;
 using ECommerce.Core.Interfaces.IUseCases.IProductUseCases;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -111,6 +113,7 @@ namespace ECommerce.APIProject.Controllers
 
 
         // POST api/<ProductController>
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost("/product")]
         public async Task<ActionResult> AddProduct([FromBody] ProductDtoIn productIn)
         {
@@ -122,6 +125,7 @@ namespace ECommerce.APIProject.Controllers
 
 
         // PUT api/<ProductController>/5
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut("product/{ProductId}")]
         public async Task<ActionResult> UpdateProduct(string ProductId, [FromBody] ProductDtoForUpdate productForUpdating)
         {
@@ -136,6 +140,7 @@ namespace ECommerce.APIProject.Controllers
 
 
         // DELETE api/<ProductController>/5
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete("product/{ProductId}")]
         public async Task<ActionResult> DeleteProduct(string ProductId)
         {
@@ -147,6 +152,7 @@ namespace ECommerce.APIProject.Controllers
         }
 
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost("AddDescound/{productId}")]
         public async Task<ActionResult> AddDescound(string productId, [FromBody] double amount)
         {
@@ -162,6 +168,7 @@ namespace ECommerce.APIProject.Controllers
         }
 
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost("DeleteDescound/{productId}")]
         public async Task<ActionResult> DeleteDescound(string productId)
         {

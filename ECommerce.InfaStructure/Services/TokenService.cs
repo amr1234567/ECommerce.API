@@ -29,6 +29,7 @@ namespace ECommerce.InfaStructure.Services
             var claims = new List<Claim>
             {
                 new(ClaimTypes.Email, user.Email),
+                new(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };
 
             foreach (var role in roles) 

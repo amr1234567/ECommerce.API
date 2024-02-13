@@ -1,6 +1,8 @@
-﻿using ECommerce.Core.DTO.ForDB;
+﻿using ECommerce.Core.Constants;
+using ECommerce.Core.DTO.ForDB;
 using ECommerce.Core.DTO.ForEndUser;
 using ECommerce.Core.Interfaces.IUseCases.ICategoryUseCases;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -72,6 +74,7 @@ namespace ECommerce.APIProject.Controllers
         }
 
         // POST api/<CategoryController>
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost("Category")]
         public async Task<ActionResult> AddCategory([FromBody] CategoryDtoIn CategoryIn)
         {
@@ -82,6 +85,7 @@ namespace ECommerce.APIProject.Controllers
         }
 
         // PUT api/<CategoryController>/5
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut("category/{id}")]
         public async Task<ActionResult> UpdateCategory(string id, [FromBody] CategoryDtoForUpdate categoryIn)
         {
@@ -96,6 +100,7 @@ namespace ECommerce.APIProject.Controllers
         }
 
         // DELETE api/<CategoryController>/5
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete("category/{id}")]
         public async Task<ActionResult> DeleteCategory(string id)
         {

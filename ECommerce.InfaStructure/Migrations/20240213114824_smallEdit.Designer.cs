@@ -4,6 +4,7 @@ using ECommerce.InfaStructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.InfaStructure.Migrations
 {
     [DbContext(typeof(WebSiteContext))]
-    partial class WebSiteContextModelSnapshot : ModelSnapshot
+    [Migration("20240213114824_smallEdit")]
+    partial class smallEdit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("Security")
                 .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -40,7 +42,7 @@ namespace ECommerce.InfaStructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", "DB");
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -101,7 +103,7 @@ namespace ECommerce.InfaStructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses", "DB");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("ECommerce.Core.Entities.Identity.WebSiteUser", b =>
@@ -176,7 +178,7 @@ namespace ECommerce.InfaStructure.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", "Security");
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("ECommerce.Core.Entities.Product", b =>
@@ -216,7 +218,7 @@ namespace ECommerce.InfaStructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", "DB");
+                    b.ToTable("Products");
 
                     b.HasData(
                         new
@@ -293,22 +295,18 @@ namespace ECommerce.InfaStructure.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", "Security");
+                    b.ToTable("AspNetRoles", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = "89cb02aa-154a-4ccf-92fd-981434b6ef31",
-                            ConcurrencyStamp = "9752d138-83b6-4478-9d57-b186b38954ce",
-                            Name = "User",
-                            NormalizedName = "USER"
+                            Name = "User"
                         },
                         new
                         {
                             Id = "9752d138-83b6-4478-9d57-b186b38954ce",
-                            ConcurrencyStamp = "89cb02aa-154a-4ccf-92fd-981434b6ef31",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
+                            Name = "Admin"
                         });
                 });
 
@@ -334,7 +332,7 @@ namespace ECommerce.InfaStructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", "Security");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -359,7 +357,7 @@ namespace ECommerce.InfaStructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", "Security");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -381,7 +379,7 @@ namespace ECommerce.InfaStructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", "Security");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -396,7 +394,7 @@ namespace ECommerce.InfaStructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", "Security");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -415,7 +413,7 @@ namespace ECommerce.InfaStructure.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", "Security");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("ECommerce.Core.Entities.Identity.WebSiteUser", b =>

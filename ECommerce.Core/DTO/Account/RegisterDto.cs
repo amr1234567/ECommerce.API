@@ -33,7 +33,7 @@ namespace ECommerce.Core.DTO.Account
             return new WebSiteUser
             {
                 Email = Email,
-                UserName = Name,
+                UserName = Email,
             };
         }
     }

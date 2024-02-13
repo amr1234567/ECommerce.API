@@ -24,7 +24,7 @@ namespace ECommerce.APIProject.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<LogInReturn>> LogIn(LogInDto logInUser)
+        public async Task<ActionResult<LogInReturn>> LogIn([FromBody]LogInDto logInUser)
         {
             if(!ModelState.IsValid)
             {
@@ -35,7 +35,7 @@ namespace ECommerce.APIProject.Controllers
                 return BadRequest("Email Not Found");
             var check = await _userManager.CheckPasswordAsync(user, logInUser.Password);
             if (!check)
-                return BadRequest("Password or email wrong");
+                return Unauthorized("Password or email wrong");
 
             var roles = await _userManager.GetRolesAsync(user);
 
@@ -50,19 +50,42 @@ namespace ECommerce.APIProject.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> RegisterAsUser(RegisterDto registerUser)
+        public async Task<ActionResult> RegisterAsUser([FromBody] RegisterDto registerUser)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var user = _userManager.FindByEmailAsync(registerUser.Email);
+            var user = await _userManager.FindByEmailAsync(registerUser.Email);
+            if (user != null) 
+                return BadRequest("Email Already Exist");
+            var newUser = await _userManager.CreateAsync(registerUser.ConvertToUser(), registerUser.Password);
+
+            if (!newUser.Succeeded)
+                return BadRequest("Something went wrong, Please Try Again");
+
+            var User = await _userManager.FindByEmailAsync(registerUser.Email);
+            await _userManager.AddToRoleAsync(User, Roles.User);
+            
+
+            return Ok("U have been registered with email : " + registerUser.Email);
+        }
+
+        [HttpPost("registeradmin")]
+        public async Task<ActionResult> RegisterAsAdmin([FromBody] RegisterDto registerUser)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var user = await _userManager.FindByEmailAsync(registerUser.Email);
             if (user != null)
                 return BadRequest("Email Already Exist");
             var newUser = await _userManager.CreateAsync(registerUser.ConvertToUser(), registerUser.Password);
 
-            await _userManager.AddToRoleAsync(await _userManager.FindByEmailAsync(registerUser.Email), Roles.User.ToString());
-            
             if (!newUser.Succeeded)
                 return BadRequest("Something went wrong, Please Try Again");
+
+            var User = await _userManager.FindByEmailAsync(registerUser.Email);
+            await _userManager.AddToRoleAsync(User, Roles.Admin);
+            await _userManager.AddToRoleAsync(User, Roles.User);
+
 
             return Ok("U have been registered with email : " + registerUser.Email);
         }
