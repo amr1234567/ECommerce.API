@@ -1,6 +1,8 @@
-﻿using ECommerce.Core.Entities;
+﻿using ECommerce.Core.Constants;
+using ECommerce.Core.Entities;
 using ECommerce.Core.Entities.Identity;
 using ECommerce.InfaStructure.Seed;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,14 +19,19 @@ namespace ECommerce.InfaStructure.Context
         {
         }
 
+
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Address> Addresses  { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             builder.SeedCategories();
             builder.SeedProducts();
+            builder.SeedRoles();
+
             base.OnModelCreating(builder);
         }
     }

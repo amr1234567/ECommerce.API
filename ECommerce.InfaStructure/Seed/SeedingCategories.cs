@@ -15,19 +15,19 @@ namespace ECommerce.InfaStructure.Seed
             modelBuilder.Entity<Category>().HasData(
                 new Category
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("71707f88-4722-4df1-b34f-8df6341e806c"),
                     Name = "Category 1",
                     Description = "Description",
                 },
                 new Category
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("6e2fe03d-0b89-4613-921e-c7eb7b0e708a"),
                     Name = "Category 2",
                     Description = "Description",
                 },
                 new Category
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("b41b2ba0-b99b-41d2-83b7-744dd943fc91"),
                     Name = "Category 3",
                     Description = "Description",
                 }

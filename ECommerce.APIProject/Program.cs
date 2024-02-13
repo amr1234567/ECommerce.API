@@ -12,7 +12,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //DI
-
 builder.Services.AddDbContext<WebSiteContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DB1"));
@@ -20,6 +19,7 @@ builder.Services.AddDbContext<WebSiteContext>(options =>
 
 builder.Services.AddCategoriesScopes();
 builder.Services.AddProductsScopes();
+builder.Services.AddAccountScopes();
 
 var app = builder.Build();
 
