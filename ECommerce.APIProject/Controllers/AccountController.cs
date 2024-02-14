@@ -3,8 +3,6 @@ using ECommerce.Core.DTO.Account;
 using ECommerce.Core.DTO.ForEndUser;
 using ECommerce.Core.Entities.Identity;
 using ECommerce.Core.Interfaces.IUseCases.IAccountUseCases;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,15 +1,10 @@
 ﻿using ECommerce.Core.Entities.Identity;
-using ECommerce.Core.Interfaces;
-using Microsoft.AspNetCore.Identity;
+using ECommerce.Core.Interfaces.IServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.InfaStructure.Services
 {
@@ -46,7 +41,7 @@ namespace ECommerce.InfaStructure.Services
                 claims: claims,
                 expires: DateTime.Now.AddDays(int.Parse(_configuration["JWT:expirePeriod"])));
 
-            return new JwtSecurityTokenHandler().WriteToken(SecurityToken);
+            return "Bearer " + new JwtSecurityTokenHandler().WriteToken(SecurityToken);
         }
     }
 }

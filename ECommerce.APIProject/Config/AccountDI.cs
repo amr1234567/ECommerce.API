@@ -1,5 +1,5 @@
 ﻿using ECommerce.Core.Entities.Identity;
-using ECommerce.Core.Interfaces;
+using ECommerce.Core.Interfaces.IServices;
 using ECommerce.Core.Interfaces.IUseCases.IAccountUseCases;
 using ECommerce.InfaStructure.Context;
 using ECommerce.InfaStructure.Services;

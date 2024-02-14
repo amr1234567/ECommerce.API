@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.APIProject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -153,7 +153,7 @@ namespace ECommerce.APIProject.Controllers
 
 
         [Authorize(Roles = Roles.Admin)]
-        [HttpPost("AddDescound/{productId}")]
+        [HttpPost("product/add-descound/{productId}")]
         public async Task<ActionResult> AddDescound(string productId, [FromBody] double amount)
         {
             bool checkGuidValidat = Guid.TryParse(productId, out Guid Id);
@@ -169,7 +169,7 @@ namespace ECommerce.APIProject.Controllers
 
 
         [Authorize(Roles = Roles.Admin)]
-        [HttpPost("DeleteDescound/{productId}")]
+        [HttpPost("product/delete-descound/{productId}")]
         public async Task<ActionResult> DeleteDescound(string productId)
         {
             bool checkGuidValidat = Guid.TryParse(productId, out Guid Id);
