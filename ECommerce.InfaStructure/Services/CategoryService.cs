@@ -43,7 +43,7 @@ namespace ECommerce.InfaStructure.Services
         public async Task<List<CategoryDtoOut>> GetCategories()
         {
             var ListCategory = await _context.Categories.ToListAsync();
-            
+
             return ListCategory.ConvertCategoriesToDto();
         }
 
@@ -60,7 +60,7 @@ namespace ECommerce.InfaStructure.Services
 
         public async Task<CategoryDtoOut> GetCategoryById(Guid Id)
         {
-            var Category =await _context.Categories.FirstOrDefaultAsync(c => c.Id.Equals(Id));
+            var Category = await _context.Categories.FirstOrDefaultAsync(c => c.Id.Equals(Id));
             if (Category == null)
                 return null;
             var CategoryDto = new CategoryDtoOut();
@@ -71,7 +71,7 @@ namespace ECommerce.InfaStructure.Services
         public async Task UpdateCategoryDetails(CategoryDtoForUpdate category, Guid Id)
         {
             var Category = await _context.Categories.FirstOrDefaultAsync(c => c.Id.Equals(Id));
-            if(Category == null)
+            if (Category == null)
                 throw new KeyNotFoundException("Can't Find The Category With Id : " + Id.ToString());
             Category.UpdateDataCategory(category);
             _context.Categories.Update(Category);

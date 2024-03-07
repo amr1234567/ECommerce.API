@@ -6,7 +6,7 @@ namespace ECommerce.APIProject.Config
 {
     public static class AuthConfiguration
     {
-        public static IServiceCollection ConfigAuth(this IServiceCollection services,IConfiguration Configuration)
+        public static IServiceCollection ConfigAuth(this IServiceCollection services, IConfiguration Configuration)
         {
             services.AddAuthentication(options =>
             {
@@ -14,9 +14,10 @@ namespace ECommerce.APIProject.Config
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options => {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidateIssuer = true,
@@ -25,15 +26,8 @@ namespace ECommerce.APIProject.Config
                         ValidAudience = Configuration["JWT:audience"],
                         ValidateLifetime = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]))
-                };
-            });
-
-            services.AddCors(corsOptions => {
-                corsOptions.AddPolicy("MyPolicy", corsPolicyBuilder =>
-                {
-                    corsPolicyBuilder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    };
                 });
-            });
 
             return services;
         }

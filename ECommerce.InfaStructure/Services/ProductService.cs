@@ -46,7 +46,7 @@ namespace ECommerce.InfaStructure.Services
         public async Task<ProductDtoOut> GetProductById(Guid Id)
         {
             var Product = await _context.Products.FindAsync(Id);
-            if ( Product != null)
+            if (Product != null)
             {
                 var Output = new ProductDtoOut();
                 Output.ToProductDto(Product);
@@ -70,9 +70,7 @@ namespace ECommerce.InfaStructure.Services
                 .Include(p => p.Category)
                 .ToListAsync();
 
-            if (products == null)
-                return null;
-            return products.ConvertProductsToDto();
+            return products == null ? null : products.ConvertProductsToDto();
         }
 
         public async Task<List<ProductDtoOut>> GetProductsByFilters(params Func<Product, bool>[] filters)
@@ -93,12 +91,12 @@ namespace ECommerce.InfaStructure.Services
         public async Task MakeDiscound(Guid ProductId, double DiscoundAmount)
         {
             if (DiscoundAmount < 0 || DiscoundAmount > 100)
-                throw new ArgumentOutOfRangeException("Discound must be between 0 and 100");
-            
+                throw new ArgumentOutOfRangeException("Discount must be between 0 and 100");
+
             var Product = await _context.Products.FirstOrDefaultAsync(p => p.Id.Equals(ProductId));
             if (Product == null)
                 throw new Exception("Can't Find Product with Id : " + ProductId.ToString());
-            
+
             Product.Discound = DiscoundAmount;
             Product.OriginalPrice = Product.Price;
             Product.Price -= (DiscoundAmount / 100) * Product.Price;

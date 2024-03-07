@@ -1,4 +1,5 @@
 using ECommerce.APIProject.Config;
+using ECommerce.Core.ConfigModels;
 using ECommerce.InfaStructure.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,8 @@ builder.Services.AddDbContext<WebSiteContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DB1"));
 });
+
+builder.Services.Configure<JwtConfigModel>(builder.Configuration.GetSection("JWT"));
 
 builder.Services.AddAccountScopes();
 builder.Services.AddCategoriesScopes();
@@ -37,7 +40,6 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseStaticFiles();
-app.UseCors("MyPolicy");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

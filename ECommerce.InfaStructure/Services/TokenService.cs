@@ -1,6 +1,8 @@
-﻿using ECommerce.Core.Entities.Identity;
+﻿using ECommerce.Core.ConfigModels;
+using ECommerce.Core.Entities.Identity;
 using ECommerce.Core.Interfaces.IServices;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,12 +13,12 @@ namespace ECommerce.InfaStructure.Services
     public class TokenService : ITokenService
     {
         private SymmetricSecurityKey _key;
-        private readonly IConfiguration _configuration;
+        private readonly IOptions<JwtConfigModel> _config;
 
-        public TokenService(IConfiguration configuration)
+        public TokenService(IOptions<JwtConfigModel> config)
         {
-            _configuration = configuration;
             _key = new SymmetricSecurityKey(new byte[10]);
+            _config = config;
         }
 
         public string CreateToken(WebSiteUser user, List<string> roles)
@@ -27,19 +29,20 @@ namespace ECommerce.InfaStructure.Services
                 new(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };
 
-            foreach (var role in roles) 
+            foreach (var role in roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
 
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Value.Key));
 
             var Credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
 
             var SecurityToken = new JwtSecurityToken(
-                issuer: _configuration["JWT:issuer"],
-                audience: _configuration["JWT:audience"],
+                issuer: _config.Value.issuer,
+                audience: _config.Value.audience,
                 signingCredentials: Credentials,
                 claims: claims,
-                expires: DateTime.Now.AddDays(int.Parse(_configuration["JWT:expirePeriod"])));
+                expires: DateTime.Now.AddDays(_config.Value.expirePeriod)
+                );
 
             return "Bearer " + new JwtSecurityTokenHandler().WriteToken(SecurityToken);
         }

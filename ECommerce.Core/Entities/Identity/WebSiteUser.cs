@@ -11,9 +11,12 @@ namespace ECommerce.Core.Entities.Identity
     public class WebSiteUser : IdentityUser
     {
         public byte[]? ImageProfile { get; set; }
-        
+
+        public string Name { get; set; }
+
         [ForeignKey(nameof(Address))]
         public Guid? AddressId { get; set; }
+
         public virtual Address? Address { get; set; }
     }
 }
