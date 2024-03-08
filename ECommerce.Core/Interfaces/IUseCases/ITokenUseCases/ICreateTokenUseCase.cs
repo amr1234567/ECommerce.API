@@ -2,7 +2,7 @@
 using ECommerce.InfaStructure.Services;
 using System.Security.Claims;
 
-namespace ECommerce.Core.Interfaces.IUseCases.IAccountUseCases
+namespace ECommerce.Core.Interfaces.IUseCases.ITokenUseCases
 {
     public interface ICreateTokenUseCase
     {

@@ -1,4 +1,5 @@
-﻿using ECommerce.Core.Entities.Identity;
+﻿using ECommerce.Core.DTO.ForEndUser;
+using ECommerce.Core.Entities.Identity;
 using ECommerce.InfaStructure.Services;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,7 @@ namespace ECommerce.Core.Interfaces.IServices
     {
         RefreshToken CreateRefreshToken();
         Task<TokenModel> CreateToken(WebSiteUser user, List<string> roles, List<Claim>? Internalclaims = null);
+        Task<LogInReturn> RefreshToken(string refreshToken);
+        Task<bool> RevokeToken(string refreshToken);
     }
 }

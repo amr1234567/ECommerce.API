@@ -6,15 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//DI
-builder.Services.AddDbContext<WebSiteContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DB1"));
-});
 
 builder.Services.Configure<JwtConfigModel>(builder.Configuration.GetSection("JWT"));
 
 builder.Services.AddAccountScopes();
+builder.Services.AddContextScopes(builder.Configuration);
+builder.Services.AddTokenScopes();
 builder.Services.AddCategoriesScopes();
 builder.Services.AddProductsScopes();
 builder.Services.AddRedisServices(builder.Configuration);

@@ -26,6 +26,7 @@ namespace ECommerce.APIProject.Config
                         ValidAudience = Configuration["JWT:audience"],
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero,
+
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]))
                     };
                 });

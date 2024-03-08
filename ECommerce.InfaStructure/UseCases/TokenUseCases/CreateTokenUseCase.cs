@@ -1,6 +1,6 @@
 ﻿using ECommerce.Core.Entities.Identity;
 using ECommerce.Core.Interfaces.IServices;
-using ECommerce.Core.Interfaces.IUseCases.IAccountUseCases;
+using ECommerce.Core.Interfaces.IUseCases.ITokenUseCases;
 using ECommerce.InfaStructure.Context;
 using ECommerce.InfaStructure.Services;
 using Stripe;
@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.InfaStructure.UseCases.AccountUseCases
+namespace ECommerce.InfaStructure.UseCases.TokenUseCases
 {
     public class CreateTokenUseCase : ICreateTokenUseCase
     {

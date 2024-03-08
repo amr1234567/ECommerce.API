@@ -15,7 +15,8 @@ namespace ECommerce.Core.DTO.Account
         public string Email { get; set; }
 
         [Required(ErrorMessage = "{0} is required")]
-        [DataType(DataType.Password)]
+        [DataType(DataType.Password, ErrorMessage = "{0} must contain at least 1 uppercase letter, 1 small letter")]
+        [MinLength(8, ErrorMessage = "{0} must be more than 8 chars")]
         public string Password { get; set; }
 
         [Compare(nameof(Password), ErrorMessage = "Doesn't match with Password")]

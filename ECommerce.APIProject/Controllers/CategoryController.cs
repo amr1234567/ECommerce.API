@@ -41,7 +41,7 @@ namespace ECommerce.APIProject.Controllers
         [HttpGet("categories")]
         public async Task<ActionResult<List<CategoryDtoOut>>> GetAllCategories()
         {
-            var Categories =await _getCategories.Execute();
+            var Categories = await _getCategories.Execute();
             if (Categories == null)
                 return BadRequest("Categories is Empty");
             return Ok(Categories.ToList());
@@ -54,7 +54,7 @@ namespace ECommerce.APIProject.Controllers
             bool check = Guid.TryParse(id, out Guid categoryId);
             if (!check)
                 return BadRequest("Wrong Input -Not Guid-");
-            var category =await _getCategoryById.Execute(categoryId);
+            var category = await _getCategoryById.Execute(categoryId);
             if (category == null)
                 return BadRequest(id + " Couldn't be found");
             return Ok(category);
@@ -62,10 +62,10 @@ namespace ECommerce.APIProject.Controllers
 
         [HttpGet("categories/filter")]
         public async Task<ActionResult<CategoryDtoOut>> GetCategories(
-            [FromQuery]string name = "")
+            [FromQuery] string name = "")
         {
             var categories = await _getCategoriesByFilters.Execute(
-                c => c.Name.ToLower().Contains(name)||
+                c => c.Name.ToLower().Contains(name) ||
                 (c.Description != null && c.Description.ToLower().Contains(name))
                 );
             if (categories == null)

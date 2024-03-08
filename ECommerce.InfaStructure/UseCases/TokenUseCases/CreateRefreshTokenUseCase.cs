@@ -1,8 +1,8 @@
 ﻿using ECommerce.Core.Entities.Identity;
 using ECommerce.Core.Interfaces.IServices;
-using ECommerce.Core.Interfaces.IUseCases.IAccountUseCases;
+using ECommerce.Core.Interfaces.IUseCases.ITokenUseCases;
 
-namespace ECommerce.InfaStructure.UseCases.AccountUseCases
+namespace ECommerce.InfaStructure.UseCases.TokenUseCases
 {
     public class CreateRefreshTokenUseCase : ICreateRefreshTokenUseCase
     {

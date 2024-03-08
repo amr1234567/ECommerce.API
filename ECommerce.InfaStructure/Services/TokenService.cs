@@ -8,7 +8,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Security.Cryptography;
-using Azure;
+using ECommerce.Core.DTO.ForEndUser;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.InfaStructure.Services
 {
@@ -16,11 +18,13 @@ namespace ECommerce.InfaStructure.Services
     {
         private SymmetricSecurityKey _key;
         private readonly IOptions<JwtConfigModel> _config;
+        private readonly UserManager<WebSiteUser> _userManager;
 
-        public TokenService(IOptions<JwtConfigModel> config)
+        public TokenService(IOptions<JwtConfigModel> config, UserManager<WebSiteUser> userManager)
         {
             _key = new SymmetricSecurityKey(new byte[10]);
             _config = config;
+            _userManager = userManager;
         }
 
         public Task<TokenModel> CreateToken(WebSiteUser user, List<string> roles, List<Claim>? Internalclaims = null)
@@ -73,6 +77,64 @@ namespace ECommerce.InfaStructure.Services
             };
         }
 
+        public async Task<LogInReturn> RefreshToken(string refreshToken)
+        {
+            var response = new LogInReturn();
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                response.Message = " Invalid Token";
+                return response;
+            }
 
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshTokens.Any(r => r.Token == refreshToken));
+            if (user == null)
+            {
+                response.Message = "Invalid Token";
+                return response;
+            }
+
+            var token = user.RefreshTokens.FirstOrDefault(r => r.Token == refreshToken);
+            if (!token.IsActive)
+            {
+                response.Message = "InActive Token";
+                return response;
+            }
+
+            token.RevokedOn = DateTime.UtcNow;
+            var newRefreshToken = CreateRefreshToken();
+            user.RefreshTokens.Add(newRefreshToken);
+            await _userManager.UpdateAsync(user);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var newToken = await CreateToken(user, roles.ToList());
+
+            response.RefreshToken = newRefreshToken.Token;
+            response.RefreshTokenExpiration = newRefreshToken.ExpiredOn;
+            response.Token = newToken.Token;
+            response.Email = user.Email;
+            response.UserName = user.Name;
+            response.TokenExpiration = newToken.ExpiredOn;
+
+            return response;
+        }
+
+        public async Task<bool> RevokeToken(string refreshToken)
+        {
+            if (string.IsNullOrEmpty(refreshToken))
+                return false;
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshTokens.Any(r => r.Token == refreshToken));
+            if (user == null)
+                return false;
+
+            var token = user.RefreshTokens.FirstOrDefault(r => r.Token == refreshToken);
+            if (!token.IsActive)
+                return false;
+
+            token.RevokedOn = DateTime.UtcNow;
+            await _userManager.UpdateAsync(user);
+
+            return true;
+        }
     }
 }

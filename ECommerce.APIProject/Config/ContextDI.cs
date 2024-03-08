@@ -6,21 +6,22 @@ using ECommerce.InfaStructure.Services;
 using ECommerce.InfaStructure.UseCases.AccountUseCases;
 using ECommerce.InfaStructure.UseCases.TokenUseCases;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Principal;
 
 namespace ECommerce.APIProject.Config
 {
-    public static class AccountDI
+    public static class ContextDI
     {
-        public static IServiceCollection AddAccountScopes(this IServiceCollection services)
+        public static IServiceCollection AddContextScopes(this IServiceCollection services, IConfiguration Configuration)
         {
-            //service
-            services.AddScoped<IAccountService, AccountService>();
+            services.AddIdentity<WebSiteUser, IdentityRole>()
+               .AddEntityFrameworkStores<WebSiteContext>();
 
-            //Use Cases
-            services.AddScoped<ILogInUseCase, LogInUseCase>();
-            services.AddScoped<IRegisterAsAdminUseCase, RegisterAsAdminUseCase>();
-            services.AddScoped<IRegisterAsUserUseCase, RegisterAsUserUseCase>();
+            services.AddDbContext<WebSiteContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DB1"));
+            });
 
             return services;
         }
