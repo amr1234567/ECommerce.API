@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Security.Cryptography;
+using Azure;
 
 namespace ECommerce.InfaStructure.Services
 {
@@ -21,13 +23,17 @@ namespace ECommerce.InfaStructure.Services
             _config = config;
         }
 
-        public string CreateToken(WebSiteUser user, List<string> roles)
+        public Task<TokenModel> CreateToken(WebSiteUser user, List<string> roles, List<Claim>? Internalclaims = null)
         {
-            var claims = new List<Claim>
+            var claims = new List<Claim>();
+            if (Internalclaims is null)
             {
-                new(ClaimTypes.Email, user.Email),
-                new(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
-            };
+                claims.Add(new Claim(ClaimTypes.Email, user.Email));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+            }
+            else
+                claims.Union(Internalclaims);
+
 
             foreach (var role in roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
@@ -35,16 +41,38 @@ namespace ECommerce.InfaStructure.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Value.Key));
 
             var Credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
-
+            var ExpierdOn = DateTime.Now.AddMinutes(_config.Value.expirePeriodInMinuts);
             var SecurityToken = new JwtSecurityToken(
                 issuer: _config.Value.issuer,
                 audience: _config.Value.audience,
                 signingCredentials: Credentials,
                 claims: claims,
-                expires: DateTime.Now.AddDays(_config.Value.expirePeriod)
+                expires: ExpierdOn
                 );
 
-            return "Bearer " + new JwtSecurityTokenHandler().WriteToken(SecurityToken);
+            return Task.FromResult(new TokenModel
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(SecurityToken),
+                CreatedOn = DateTime.Now,
+                ExpiredOn = ExpierdOn
+            });
         }
+
+        public RefreshToken CreateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+            }
+            return new RefreshToken
+            {
+                CreatedOn = DateTime.UtcNow,
+                ExpiredOn = DateTime.UtcNow.AddDays(_config.Value.RefreshExpiredPeriodInDays),
+                Token = Convert.ToBase64String(randomNumber)
+            };
+        }
+
+
     }
 }

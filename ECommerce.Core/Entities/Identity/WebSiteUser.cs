@@ -18,5 +18,7 @@ namespace ECommerce.Core.Entities.Identity
         public Guid? AddressId { get; set; }
 
         public virtual Address? Address { get; set; }
+
+        public List<RefreshToken>? RefreshTokens { get; set; }
     }
 }

@@ -2,9 +2,12 @@
 using ECommerce.Core.Interfaces.IServices;
 using ECommerce.Core.Interfaces.IUseCases.IAccountUseCases;
 using ECommerce.InfaStructure.Context;
+using ECommerce.InfaStructure.Services;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,9 +22,9 @@ namespace ECommerce.InfaStructure.UseCases.AccountUseCases
             _tokenService = tokenService;
         }
 
-        public string Execute(WebSiteUser user, List<string> roles)
+        public async Task<TokenModel> Execute(WebSiteUser user, List<string> roles, List<Claim>? clamis = null)
         {
-            return _tokenService.CreateToken(user, roles);
+            return await _tokenService.CreateToken(user, roles, clamis);
         }
     }
 }

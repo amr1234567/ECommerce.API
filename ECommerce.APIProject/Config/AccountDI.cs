@@ -21,6 +21,7 @@ namespace ECommerce.APIProject.Config
 
             //Use Cases
             services.AddScoped<ICreateTokenUseCase, CreateTokenUseCase>();
+            services.AddScoped<ICreateRefreshTokenUseCase, CreateRefreshTokenUseCase>();
 
 
             return services;
