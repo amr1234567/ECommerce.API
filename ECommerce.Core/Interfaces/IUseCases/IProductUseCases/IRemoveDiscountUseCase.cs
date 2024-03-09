@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Core.Interfaces.IUseCases.IProductUseCases
 {
-    public interface IRemoveDescoundUseCase
+    public interface IRemoveDiscountUseCase
     {
         Task Execute(Guid ProductId);
     }

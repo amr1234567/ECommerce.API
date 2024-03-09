@@ -1,4 +1,6 @@
-﻿using ECommerce.Core.Entities;
+﻿// Ignore Spelling: Dto
+
+using ECommerce.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,7 +13,7 @@ namespace ECommerce.Core.DTO.ForEndUser
     public class CategoryDtoOut
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
 
         public void ToCategoryDto(Category category)

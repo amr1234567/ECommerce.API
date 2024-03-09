@@ -1,4 +1,6 @@
-﻿using ECommerce.Core.Constants;
+﻿// Ignore Spelling: Admin Infa
+
+using ECommerce.Core.Constants;
 using ECommerce.Core.DTO.Account;
 using ECommerce.Core.DTO.ForEndUser;
 using ECommerce.Core.Entities.Identity;
@@ -70,7 +72,7 @@ namespace ECommerce.InfaStructure.Services
             if (!newUser.Succeeded)
                 return false;
 
-            var User = await _userManager.FindByEmailAsync(registerUser.Email);
+            var User = await _userManager.FindByEmailAsync(new HtmlSanitizer().Sanitize(registerUser.Email));
             await _userManager.AddToRoleAsync(User, Roles.User);
 
             return true;

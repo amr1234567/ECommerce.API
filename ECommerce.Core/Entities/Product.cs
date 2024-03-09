@@ -15,14 +15,14 @@ namespace ECommerce.Core.Entities
         public double Price { get; set; }
 
         [Range(0.1, 100, ErrorMessage = "Out of Range")]
-        public double? Discound { get; set; }
+        public double? Discount { get; set; }
 
         [Range(0.1, double.MaxValue)]
         public double? OriginalPrice { get; set; }
 
         [Required(ErrorMessage = "{0} must have value")]
         [Range(0, double.MaxValue)]
-        public int Quentity { get; set; }
+        public int Quantity { get; set; }
 
         [ForeignKey("Category")]
         public Guid? CategoryId { get; set; }

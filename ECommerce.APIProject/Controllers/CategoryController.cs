@@ -5,8 +5,6 @@ using ECommerce.Core.Interfaces.IUseCases.ICategoryUseCases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace ECommerce.APIProject.Controllers
 {
     [Route("api/")]
@@ -37,7 +35,6 @@ namespace ECommerce.APIProject.Controllers
             _addCategory = addCategory;
         }
 
-        // GET: api/<CategoryController>
         [HttpGet("categories")]
         public async Task<ActionResult<List<CategoryDtoOut>>> GetAllCategories()
         {
@@ -47,7 +44,6 @@ namespace ECommerce.APIProject.Controllers
             return Ok(Categories.ToList());
         }
 
-        // GET api/<CategoryController>/5
         [HttpGet("category/{id}")]
         public async Task<ActionResult<CategoryDtoOut>> GetCategoryById(string id)
         {
@@ -65,15 +61,14 @@ namespace ECommerce.APIProject.Controllers
             [FromQuery] string name = "")
         {
             var categories = await _getCategoriesByFilters.Execute(
-                c => c.Name.ToLower().Contains(name) ||
-                (c.Description != null && c.Description.ToLower().Contains(name))
+                c => c.Name.ToLower().Contains(name.ToLower()) ||
+                (c.Description != null && c.Description.ToLower().Contains(name.ToLower()))
                 );
             if (categories == null)
                 return Ok(new List<CategoryDtoOut>());
             return Ok(categories);
         }
 
-        // POST api/<CategoryController>
         [Authorize(Roles = Roles.Admin)]
         [HttpPost("Category")]
         public async Task<ActionResult> AddCategory([FromBody] CategoryDtoIn CategoryIn)
@@ -81,10 +76,9 @@ namespace ECommerce.APIProject.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("Bad Input");
             await _addCategory.Excute(CategoryIn);
-            return Ok("Category Added Successfuly");
+            return Ok("Category Added Successfully");
         }
 
-        // PUT api/<CategoryController>/5
         [Authorize(Roles = Roles.Admin)]
         [HttpPut("category/{id}")]
         public async Task<ActionResult> UpdateCategory(string id, [FromBody] CategoryDtoForUpdate categoryIn)
@@ -99,7 +93,6 @@ namespace ECommerce.APIProject.Controllers
             return Ok($"Category with \"{id}\" has been updated");
         }
 
-        // DELETE api/<CategoryController>/5
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete("category/{id}")]
         public async Task<ActionResult> DeleteCategory(string id)

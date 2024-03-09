@@ -27,16 +27,17 @@ namespace ECommerce.InfaStructure.Services
             _userManager = userManager;
         }
 
-        public Task<TokenModel> CreateToken(WebSiteUser user, List<string> roles, List<Claim>? Internalclaims = null)
+        public Task<TokenModel> CreateToken(WebSiteUser user, List<string> roles, List<Claim>? InternalClaims = null)
         {
-            var claims = new List<Claim>();
-            if (Internalclaims is null)
+            var claims = new List<Claim>
             {
-                claims.Add(new Claim(ClaimTypes.Email, user.Email));
-                claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-            }
-            else
-                claims.Union(Internalclaims);
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            if (InternalClaims is not null)
+                claims.Union(InternalClaims);
 
 
             foreach (var role in roles)
@@ -44,12 +45,12 @@ namespace ECommerce.InfaStructure.Services
 
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Value.Key));
 
-            var Credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
             var ExpierdOn = DateTime.Now.AddMinutes(_config.Value.expirePeriodInMinuts);
+
             var SecurityToken = new JwtSecurityToken(
                 issuer: _config.Value.issuer,
                 audience: _config.Value.audience,
-                signingCredentials: Credentials,
+                signingCredentials: new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature),
                 claims: claims,
                 expires: ExpierdOn
                 );
@@ -80,41 +81,36 @@ namespace ECommerce.InfaStructure.Services
         public async Task<LogInReturn> RefreshToken(string refreshToken)
         {
             var response = new LogInReturn();
-            if (string.IsNullOrEmpty(refreshToken))
+
+            var revokeCurrentToken = await RevokeToken(refreshToken);
+            if (!revokeCurrentToken)
             {
-                response.Message = " Invalid Token";
+                response.Message = "Invalid Token";
                 return response;
             }
 
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshTokens.Any(r => r.Token == refreshToken));
             if (user == null)
             {
-                response.Message = "Invalid Token";
+                response.Message = "SomeThing Went Wrong";
                 return response;
             }
 
-            var token = user.RefreshTokens.FirstOrDefault(r => r.Token == refreshToken);
-            if (!token.IsActive)
-            {
-                response.Message = "InActive Token";
-                return response;
-            }
-
-            token.RevokedOn = DateTime.UtcNow;
             var newRefreshToken = CreateRefreshToken();
-            user.RefreshTokens.Add(newRefreshToken);
-            await _userManager.UpdateAsync(user);
+            user.RefreshTokens?.Add(newRefreshToken);
+            response.RefreshToken = newRefreshToken.Token;
+            response.RefreshTokenExpiration = newRefreshToken.ExpiredOn;
+
 
             var roles = await _userManager.GetRolesAsync(user);
             var newToken = await CreateToken(user, roles.ToList());
-
-            response.RefreshToken = newRefreshToken.Token;
-            response.RefreshTokenExpiration = newRefreshToken.ExpiredOn;
             response.Token = newToken.Token;
-            response.Email = user.Email;
-            response.UserName = user.Name;
             response.TokenExpiration = newToken.ExpiredOn;
 
+            response.Email = user.Email;
+            response.UserName = user.Name;
+
+            await _userManager.UpdateAsync(user);
             return response;
         }
 
@@ -127,8 +123,8 @@ namespace ECommerce.InfaStructure.Services
             if (user == null)
                 return false;
 
-            var token = user.RefreshTokens.FirstOrDefault(r => r.Token == refreshToken);
-            if (!token.IsActive)
+            var token = user.RefreshTokens?.FirstOrDefault(r => r.Token == refreshToken);
+            if (token is not null && !token.IsActive)
                 return false;
 
             token.RevokedOn = DateTime.UtcNow;

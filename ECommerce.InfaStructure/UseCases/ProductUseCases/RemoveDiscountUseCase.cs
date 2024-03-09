@@ -1,4 +1,6 @@
-﻿using ECommerce.Core.Interfaces.IServices;
+﻿// Ignore Spelling: Infa
+
+using ECommerce.Core.Interfaces.IServices;
 using ECommerce.Core.Interfaces.IUseCases.IProductUseCases;
 using System;
 using System.Collections.Generic;
@@ -8,18 +10,18 @@ using System.Threading.Tasks;
 
 namespace ECommerce.InfaStructure.UseCases.ProductUseCases
 {
-    public class MakeDescoundUseCase : IMakeDescoundUseCase
+    public class RemoveDiscountUseCase : IRemoveDiscountUseCase
     {
         private readonly IProductService _productService;
 
-        public MakeDescoundUseCase(IProductService productService)
+        public RemoveDiscountUseCase(IProductService productService)
         {
             _productService = productService;
         }
 
-        public async Task Execute(Guid ProductId, double Discound)
+        public async Task Execute(Guid ProductId)
         {
-            await _productService.MakeDiscound(ProductId, Discound);
+            await _productService.RemoveDiscount(ProductId);
         }
     }
 }

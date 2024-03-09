@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿// Ignore Spelling: Auth
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -26,7 +28,6 @@ namespace ECommerce.APIProject.Config
                         ValidAudience = Configuration["JWT:audience"],
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero,
-
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]))
                     };
                 });

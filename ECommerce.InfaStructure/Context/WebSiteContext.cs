@@ -1,16 +1,11 @@
-﻿using ECommerce.Core.Constants;
+﻿// Ignore Spelling: Infa
+
+using ECommerce.Core.Constants;
 using ECommerce.Core.Entities;
 using ECommerce.Core.Entities.Identity;
 using ECommerce.InfaStructure.DBConfiguration;
-using ECommerce.InfaStructure.Seed;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.InfaStructure.Context
 {

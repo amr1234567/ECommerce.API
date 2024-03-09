@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Core.Interfaces.IUseCases.IProductUseCases
 {
-    public interface IMakeDescoundUseCase
+    public interface IMakeDiscountUseCase
     {
         Task Execute(Guid ProductId, double Discound);
     }

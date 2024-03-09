@@ -22,8 +22,8 @@ namespace ECommerce.APIProject.Config
             services.AddScoped<IGetProductsByCategoryIdUseCase, GetProductsByCategoryIdUseCase>();
             services.AddScoped<IGetProductsByFiltersUseCase, GetProductsByFiltersUseCase>();
             services.AddScoped<IGetProductsUseCase, GetProductsUseCase>();
-            services.AddScoped<IMakeDescoundUseCase,MakeDescoundUseCase>();
-            services.AddScoped<IRemoveDescoundUseCase,RemoveDescoundUseCase>();
+            services.AddScoped<IMakeDiscountUseCase,MakeDescoundUseCase>();
+            services.AddScoped<IRemoveDescoundUseCase,RemoveDiscountUseCase>();
 
             return services;
         }

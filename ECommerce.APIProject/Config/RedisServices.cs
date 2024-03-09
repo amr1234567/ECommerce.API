@@ -4,7 +4,7 @@ namespace ECommerce.APIProject.Config
 {
     public static class RedisServices
     {
-        public static IServiceCollection AddRedisServices(this IServiceCollection services,IConfiguration _configuration)
+        public static IServiceCollection AddRedisServices(this IServiceCollection services, IConfiguration _configuration)
         {
             services.AddSingleton<IConnectionMultiplexer>(options =>
             {

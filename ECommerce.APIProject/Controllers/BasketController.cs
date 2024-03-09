@@ -22,10 +22,10 @@ namespace ECommerce.APIProject.Controllers
         }
 
         [HttpGet("basket/{basketId}")]
-        public async Task<ActionResult<CustomerBasket>> Get(string basketId) 
+        public async Task<ActionResult<CustomerBasket>> Get(string basketId)
         {
             var basket = await _getBasket.Execute(basketId);
-            if (basket == null) 
+            if (basket == null)
                 return NotFound("Wrong Id Maybe");
             return Ok(basket);
         }
@@ -35,7 +35,7 @@ namespace ECommerce.APIProject.Controllers
         {
             var basket = await _createOrUpdateBasket.Execute(customerBasket);
             if (basket == null)
-                return NotFound("Wrong Id mayber");
+                return NotFound("Wrong Id maybe");
             return Ok(basket);
         }
 

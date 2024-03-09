@@ -33,8 +33,8 @@ namespace ECommerce.InfaStructure.Services
         public async Task<CustomerBasket> UpdateOrCreateBasketAsync(CustomerBasket basket)
         {
             var newBasket = await _database.StringSetAsync(basket.BusketId, JsonSerializer.Serialize(basket), TimeSpan.FromHours(1));
-            
-            if(!newBasket) return new CustomerBasket();
+
+            if (!newBasket) return new CustomerBasket();
 
             return await GetBasketAsync(basket.BusketId);
         }

@@ -1,16 +1,12 @@
-﻿using ECommerce.Core.DTO.ForDB;
+﻿// Ignore Spelling: Infa
+
+using ECommerce.Core.DTO.ForDB;
 using ECommerce.Core.DTO.ForEndUser;
 using ECommerce.Core.Entities;
 using ECommerce.Core.Helpers;
 using ECommerce.Core.Interfaces.IServices;
 using ECommerce.InfaStructure.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.InfaStructure.Services
 {
@@ -33,7 +29,7 @@ namespace ECommerce.InfaStructure.Services
 
         public async Task DeleteCategory(Guid Id)
         {
-            var Category = await _context.Categories.FindAsync(Id);
+            var Category = await FindCategory(Id);
             if (Category == null)
                 throw new KeyNotFoundException("Can't Find The Category With Id : " + Id.ToString());
             _context.Categories.Remove(Category);
@@ -60,7 +56,7 @@ namespace ECommerce.InfaStructure.Services
 
         public async Task<CategoryDtoOut> GetCategoryById(Guid Id)
         {
-            var Category = await _context.Categories.FirstOrDefaultAsync(c => c.Id.Equals(Id));
+            var Category = await FindCategory(Id);
             if (Category == null)
                 return null;
             var CategoryDto = new CategoryDtoOut();
@@ -70,12 +66,15 @@ namespace ECommerce.InfaStructure.Services
 
         public async Task UpdateCategoryDetails(CategoryDtoForUpdate category, Guid Id)
         {
-            var Category = await _context.Categories.FirstOrDefaultAsync(c => c.Id.Equals(Id));
+            var Category = await FindCategory(Id);
             if (Category == null)
                 throw new KeyNotFoundException("Can't Find The Category With Id : " + Id.ToString());
             Category.UpdateDataCategory(category);
             _context.Categories.Update(Category);
             await _context.SaveChangesAsync();
         }
+
+        private async Task<Category?> FindCategory(Guid Id) =>
+            await _context.Categories.FirstOrDefaultAsync(c => c.Id.Equals(Id));
     }
 }

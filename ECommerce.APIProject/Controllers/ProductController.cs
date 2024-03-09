@@ -22,8 +22,8 @@ namespace ECommerce.APIProject.Controllers
         private readonly IGetProductsByFiltersUseCase _getProductsByFilters;
         private readonly IGetProductsUseCase _getProducts;
         private readonly IUpdateProductUseCase _updateProduct;
-        private readonly IRemoveDescoundUseCase _removeDescound;
-        private readonly IMakeDescoundUseCase _makeDescound;
+        private readonly IRemoveDiscountUseCase _removeDiscount;
+        private readonly IMakeDiscountUseCase _makeDiscount;
 
         public ProductController(
             IAddProductUseCase addProduct,
@@ -33,8 +33,8 @@ namespace ECommerce.APIProject.Controllers
             IGetProductsByFiltersUseCase getProductsByFilters,
             IGetProductsUseCase getProducts,
             IUpdateProductUseCase updateProduct,
-            IRemoveDescoundUseCase removeDescound,
-            IMakeDescoundUseCase makeDescound
+            IRemoveDiscountUseCase removeDiscount,
+            IMakeDiscountUseCase makeDiscount
             )
         {
             _addProduct = addProduct;
@@ -44,12 +44,11 @@ namespace ECommerce.APIProject.Controllers
             _getProductsByFilters = getProductsByFilters;
             _getProducts = getProducts;
             _updateProduct = updateProduct;
-            _removeDescound = removeDescound;
-            _makeDescound = makeDescound;
+            _removeDiscount = removeDiscount;
+            _makeDiscount = makeDiscount;
         }
 
 
-        // GET: api/<ProductController>
         [HttpGet("products")]
         public async Task<ActionResult<List<ProductDtoOut>>> GetProducts()
         {
@@ -83,11 +82,11 @@ namespace ECommerce.APIProject.Controllers
         {
             Func<Product, bool>[] filters = new Func<Product, bool>[]
             {
-                c => c.Name.ToLower().Contains(name.ToLower()),
-                c => c.Price > MinPrice,
-                c => c.Price < MaxPrice,
-                c => c.Quentity < MaxQuantity,
-                c => c.Quentity > MinQuantity,
+                c => c.Name.ToLower().Contains(name.ToLower(), StringComparison.CurrentCultureIgnoreCase),
+                c => c.Price >= MinPrice,
+                c => c.Price <= MaxPrice,
+                c => c.Quantity <= MaxQuantity,
+                c => c.Quantity >= MinQuantity,
             };
 
             var products = await _getProductsByFilters.Execute(filters);
@@ -97,7 +96,6 @@ namespace ECommerce.APIProject.Controllers
         }
 
 
-        // GET api/<ProductController>/5
         [HttpGet("product/{ProductId}")]
         public async Task<ActionResult<ProductDtoOut>> GetProductById(string ProductId)
         {
@@ -112,7 +110,6 @@ namespace ECommerce.APIProject.Controllers
 
 
 
-        // POST api/<ProductController>
         [Authorize(Roles = Roles.Admin)]
         [HttpPost("/product")]
         public async Task<ActionResult> AddProduct([FromBody] ProductDtoIn productIn)
@@ -124,7 +121,6 @@ namespace ECommerce.APIProject.Controllers
         }
 
 
-        // PUT api/<ProductController>/5
         [Authorize(Roles = Roles.Admin)]
         [HttpPut("product/{ProductId}")]
         public async Task<ActionResult> UpdateProduct(string ProductId, [FromBody] ProductDtoForUpdate productForUpdating)
@@ -132,14 +128,13 @@ namespace ECommerce.APIProject.Controllers
             bool checkGuidValidat = Guid.TryParse(ProductId, out Guid result);
             if (!checkGuidValidat)
                 return BadRequest($"Bad input -Guid : {ProductId} not valid- ");
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             await _updateProduct.Execute(productForUpdating, result);
             return Ok("Product Has Been Updated");
         }
 
 
-        // DELETE api/<ProductController>/5
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete("product/{ProductId}")]
         public async Task<ActionResult> DeleteProduct(string ProductId)
@@ -153,30 +148,30 @@ namespace ECommerce.APIProject.Controllers
 
 
         [Authorize(Roles = Roles.Admin)]
-        [HttpPost("product/add-descound/{productId}")]
-        public async Task<ActionResult> AddDescound(string productId, [FromBody] double amount)
+        [HttpPost("product/add-discount/{productId}")]
+        public async Task<ActionResult> AddDiscount(string productId, [FromBody] double amount)
         {
             bool checkGuidValidat = Guid.TryParse(productId, out Guid Id);
             if (!checkGuidValidat)
                 return BadRequest($"Bad input -Guid : {productId} not valid- ");
-            await _removeDescound.Execute(Id);
+            await _removeDiscount.Execute(Id);
             var check = double.TryParse(amount.ToString(), out double AmountInDouble);
             if (!check)
                 return BadRequest("Not a number");
-            await _makeDescound.Execute(Id, AmountInDouble);
+            await _makeDiscount.Execute(Id, AmountInDouble);
             return Ok("Done ");
         }
 
 
         [Authorize(Roles = Roles.Admin)]
-        [HttpPost("product/delete-descound/{productId}")]
-        public async Task<ActionResult> DeleteDescound(string productId)
+        [HttpPost("product/delete-discount/{productId}")]
+        public async Task<ActionResult> DeleteDiscount(string productId)
         {
             bool checkGuidValidat = Guid.TryParse(productId, out Guid Id);
             if (!checkGuidValidat)
                 return BadRequest($"Bad input -Guid : {productId} not valid- ");
-            
-            await _removeDescound.Execute(Id);
+
+            await _removeDiscount.Execute(Id);
             return Ok("Done ");
         }
     }

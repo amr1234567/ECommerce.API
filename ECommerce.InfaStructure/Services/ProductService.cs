@@ -1,15 +1,12 @@
-﻿using ECommerce.Core.DTO.ForDB;
+﻿// Ignore Spelling: Infa
+
+using ECommerce.Core.DTO.ForDB;
 using ECommerce.Core.DTO.ForEndUser;
 using ECommerce.Core.Entities;
 using ECommerce.Core.Helpers;
 using ECommerce.Core.Interfaces.IServices;
 using ECommerce.InfaStructure.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.InfaStructure.Services
 {
@@ -31,7 +28,7 @@ namespace ECommerce.InfaStructure.Services
 
         public async Task DeleteProduct(Guid Id)
         {
-            var Product = await _context.Products.FindAsync(Id);
+            var Product = await FindProduct(Id);
             if (Product != null)
             {
                 _context.Products.Remove(Product);
@@ -45,7 +42,7 @@ namespace ECommerce.InfaStructure.Services
 
         public async Task<ProductDtoOut> GetProductById(Guid Id)
         {
-            var Product = await _context.Products.FindAsync(Id);
+            var Product = await FindProduct(Id);
             if (Product != null)
             {
                 var Output = new ProductDtoOut();
@@ -88,33 +85,33 @@ namespace ECommerce.InfaStructure.Services
             return ProductsDto;
         }
 
-        public async Task MakeDiscound(Guid ProductId, double DiscoundAmount)
+        public async Task MakeDiscount(Guid ProductId, double DiscountAmount)
         {
-            if (DiscoundAmount < 0 || DiscoundAmount > 100)
+            if (DiscountAmount < 0 || DiscountAmount > 100)
                 throw new ArgumentOutOfRangeException("Discount must be between 0 and 100");
 
-            var Product = await _context.Products.FirstOrDefaultAsync(p => p.Id.Equals(ProductId));
+            var Product = await FindProduct(ProductId);
             if (Product == null)
                 throw new Exception("Can't Find Product with Id : " + ProductId.ToString());
 
-            Product.Discound = DiscoundAmount;
+            Product.Discount = DiscountAmount;
             Product.OriginalPrice = Product.Price;
-            Product.Price -= (DiscoundAmount / 100) * Product.Price;
+            Product.Price -= (DiscountAmount / 100) * Product.Price;
             _context.Products.Update(Product);
             await _context.SaveChangesAsync();
 
         }
 
-        public async Task RemoveDiscound(Guid ProductId)
+        public async Task RemoveDiscount(Guid ProductId)
         {
-            var Product = await _context.Products.FindAsync(ProductId);
+            var Product = await FindProduct(ProductId);
             if (Product == null)
                 throw new Exception("Can't Find Product with Id : " + ProductId.ToString());
-            if (Product.Discound != null && Product.OriginalPrice != null)
+            if (Product.Discount != null && Product.OriginalPrice != null)
             {
                 Product.Price = (double)Product.OriginalPrice;
                 Product.OriginalPrice = null;
-                Product.Discound = 0;
+                Product.Discount = 0;
                 _context.Products.Update(Product);
                 await _context.SaveChangesAsync();
             }
@@ -123,12 +120,15 @@ namespace ECommerce.InfaStructure.Services
 
         public async Task UpdateProductDetails(ProductDtoForUpdate Product, Guid Id)
         {
-            var DbProduct = await _context.Products.FindAsync(Id);
+            var DbProduct = await FindProduct(Id);
             if (DbProduct == null)
                 throw new Exception("Can't Find Product with Id : " + Id.ToString());
             DbProduct.UpdateProductDetails(Product);
             _context.Products.Update(DbProduct);
             await _context.SaveChangesAsync();
         }
+
+        private async Task<Product?> FindProduct(Guid Id) =>
+            await _context.Products.FirstOrDefaultAsync(c => c.Id.Equals(Id));
     }
 }

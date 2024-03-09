@@ -1,4 +1,6 @@
-﻿using Azure;
+﻿// Ignore Spelling: Admin
+
+using Azure;
 using ECommerce.Core.Constants;
 using ECommerce.Core.DTO.Account;
 using ECommerce.Core.DTO.ForEndUser;
@@ -21,16 +23,19 @@ namespace ECommerce.APIProject.Controllers
         private readonly IRegisterAsAdminUseCase _registerAsAdmin;
         private readonly IRegisterAsUserUseCase _registerAsUser;
         private readonly IRefreshTokenUseCase _refreshToken;
+        private readonly IRevokeTokenUseCase _revokeToken;
 
         public AccountController(ILogInUseCase logIn,
             IRegisterAsAdminUseCase registerAsAdmin,
             IRegisterAsUserUseCase registerAsUser,
-            IRefreshTokenUseCase refreshToken)
+            IRefreshTokenUseCase refreshToken,
+            IRevokeTokenUseCase revokeToken)
         {
             _logIn = logIn;
             _registerAsAdmin = registerAsAdmin;
             _registerAsUser = registerAsUser;
             _refreshToken = refreshToken;
+            _revokeToken = revokeToken;
         }
 
         [HttpPost("login")]
@@ -74,7 +79,7 @@ namespace ECommerce.APIProject.Controllers
         [HttpPost("refreshtoken")]
         public async Task<ActionResult<LogInReturn>> RefreshToken(string? refreshToken = null)
         {
-            var token = refreshToken ?? Request.Cookies["RefreshTokent"];
+            var token = refreshToken ?? Request.Cookies["RefreshToken"];
 
             if (string.IsNullOrEmpty(token))
                 return Unauthorized(new LogInReturn { Message = "Bad Token" });
@@ -86,6 +91,21 @@ namespace ECommerce.APIProject.Controllers
             return BadRequest(response.Message);
         }
 
+        [HttpPost("revokeToken")]
+        public async Task<ActionResult> revokeToken(string? refreshToken = null)
+        {
+            var token = refreshToken ?? Request.Cookies["RefreshToken"];
+
+            if (string.IsNullOrEmpty(token))
+                return Unauthorized(new LogInReturn { Message = "Bad Token" });
+
+            var response = await _revokeToken.Execute(token);
+
+            if (response)
+                return Ok("Token Removed");
+            return BadRequest("Invalid Token");
+        }
+
         private void SetRefreshTokenToCookie(string RefreshToken, DateTime ExpireOn)
         {
             var cookieOption = new CookieOptions
@@ -94,7 +114,7 @@ namespace ECommerce.APIProject.Controllers
                 HttpOnly = true
             };
 
-            Response.Cookies.Append("RefreshTokent", RefreshToken, cookieOption);
+            Response.Cookies.Append("RefreshToken", RefreshToken, cookieOption);
         }
     }
 }

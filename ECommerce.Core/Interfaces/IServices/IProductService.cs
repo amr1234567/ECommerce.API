@@ -16,8 +16,8 @@ namespace ECommerce.Core.Interfaces.IServices
         Task<List<ProductDtoOut>> GetProductsByCategoryId(Guid CategoryId);
         Task<List<ProductDtoOut>> GetProductsByFilters(params Func<Product, bool>[] filters);
         Task DeleteProduct(Guid Id);
-        Task MakeDiscound(Guid ProductId,double DiscoundAmount);
-        Task RemoveDiscound(Guid ProductId);
+        Task MakeDiscount(Guid ProductId, double DiscountAmount);
+        Task RemoveDiscount(Guid ProductId);
         Task UpdateProductDetails(ProductDtoForUpdate Product, Guid Id);
         Task AddProduct(ProductDtoIn Product);
     }
