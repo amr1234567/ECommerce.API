@@ -19,7 +19,7 @@ namespace ECommerce.InfaStructure.Seed
                     Name = "Product 1",
                     Price = 300,
                     CategoryId = Guid.Parse("71707f88-4722-4df1-b34f-8df6341e806c"),
-                    Quentity = 27
+                    Quantity = 27
                 },
                 new Product
                 {
@@ -27,7 +27,7 @@ namespace ECommerce.InfaStructure.Seed
                     Name = "Product 2",
                     Price = 150,
                     CategoryId = Guid.Parse("6e2fe03d-0b89-4613-921e-c7eb7b0e708a"),
-                    Quentity = 10
+                    Quantity = 10
                 },
                 new Product
                 {
@@ -35,7 +35,7 @@ namespace ECommerce.InfaStructure.Seed
                     Name = "Product 3",
                     Price = 150.5,
                     CategoryId = Guid.Parse("b41b2ba0-b99b-41d2-83b7-744dd943fc91"),
-                    Quentity = 50
+                    Quantity = 50
                 },
                 new Product
                 {
@@ -43,7 +43,7 @@ namespace ECommerce.InfaStructure.Seed
                     Name = "Product 4",
                     Price = 300,
                     CategoryId = Guid.Parse("b41b2ba0-b99b-41d2-83b7-744dd943fc91"),
-                    Quentity = 100
+                    Quantity = 100
                 },
                 new Product
                 {
@@ -51,7 +51,7 @@ namespace ECommerce.InfaStructure.Seed
                     Name = "Product 5",
                     Price = 150.9,
                     CategoryId = Guid.Parse("6e2fe03d-0b89-4613-921e-c7eb7b0e708a"),
-                    Quentity = 20
+                    Quantity = 20
                 },
                 new Product
                 {
@@ -59,7 +59,7 @@ namespace ECommerce.InfaStructure.Seed
                     Name = "Product 6",
                     Price = 200,
                     CategoryId = Guid.Parse("71707f88-4722-4df1-b34f-8df6341e806c"),
-                    Quentity = 5
+                    Quantity = 5
                 }
                 );
         }

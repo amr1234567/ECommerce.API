@@ -10,11 +10,11 @@ namespace ECommerce.Core.Helpers
 {
     public static class ProductsExtentionMethods
     {
-        public static void UpdateProductDetails(this Product Originalproduct ,Product newProduct)
+        public static void UpdateProductDetails(this Product Originalproduct, Product newProduct)
         {
             Originalproduct.Name = string.IsNullOrEmpty(newProduct.Name) ? Originalproduct.Name : newProduct.Name;
 
-            Originalproduct.Quentity = (newProduct.Quentity == null || newProduct.Quentity == 0) ? Originalproduct.Quentity : newProduct.Quentity;
+            Originalproduct.Quantity = (newProduct.Quantity == null || newProduct.Quantity == 0) ? Originalproduct.Quantity : newProduct.Quantity;
             Originalproduct.Picture = (newProduct.Picture == null) ? Originalproduct.Picture : newProduct.Picture;
             Originalproduct.Price = (newProduct.Price == null || newProduct.Price == 0) ? Originalproduct.Price : newProduct.Price;
             Originalproduct.CategoryId = (!Guid.TryParse(newProduct.CategoryId.ToString(), out _)) ? Originalproduct.CategoryId : newProduct.CategoryId;
@@ -25,7 +25,7 @@ namespace ECommerce.Core.Helpers
         {
             Originalproduct.Name = string.IsNullOrEmpty(newProduct.Name) ? Originalproduct.Name : newProduct.Name;
 
-            Originalproduct.Quentity = (newProduct.Quentity == null || newProduct.Quentity == 0) ? Originalproduct.Quentity : newProduct.Quentity;
+            Originalproduct.Quantity = (newProduct.Quentity == null || newProduct.Quentity == 0) ? Originalproduct.Quantity : newProduct.Quentity;
             Originalproduct.Picture = (newProduct.Picture == null) ? Originalproduct.Picture : newProduct.Picture;
             Originalproduct.Price = (newProduct.Price == null || newProduct.Price == 0) ? Originalproduct.Price : newProduct.Price;
             Originalproduct.CategoryId = (!Guid.TryParse(newProduct.CategoryId.ToString(), out _)) ? Originalproduct.CategoryId : newProduct.CategoryId;
@@ -34,8 +34,8 @@ namespace ECommerce.Core.Helpers
 
         public static void UpdateProductDetails(this Product Originalproduct, ProductDtoForUpdate newProduct)
         {
-            Originalproduct.Name = string.IsNullOrEmpty(newProduct.Name)? Originalproduct.Name : newProduct.Name;
-            Originalproduct.Quentity = (newProduct.Quentity == null || newProduct.Quentity == 0) ? (int)Originalproduct.Quentity : (int)newProduct.Quentity;
+            Originalproduct.Name = string.IsNullOrEmpty(newProduct.Name) ? Originalproduct.Name : newProduct.Name;
+            Originalproduct.Quantity = (newProduct.Quentity == null || newProduct.Quentity == 0) ? (int)Originalproduct.Quantity : (int)newProduct.Quentity;
             Originalproduct.Picture = (newProduct.Picture == null) ? Originalproduct.Picture : newProduct.Picture;
             Originalproduct.Price = (newProduct.Price == null || newProduct.Price == 0) ? (double)Originalproduct.Price : (double)newProduct.Price;
             Originalproduct.CategoryId = (!Guid.TryParse(newProduct.CategoryId.ToString(), out _)) ? Originalproduct.CategoryId : newProduct.CategoryId;

@@ -1,4 +1,6 @@
-﻿using ECommerce.Core.Entities.BusketEntities;
+﻿// Ignore Spelling: Infa
+
+using ECommerce.Core.Entities.BusketEntities;
 using ECommerce.Core.Interfaces.IServices;
 using StackExchange.Redis;
 using System;

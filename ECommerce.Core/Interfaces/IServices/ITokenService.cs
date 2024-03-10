@@ -14,7 +14,7 @@ namespace ECommerce.Core.Interfaces.IServices
     {
         RefreshToken CreateRefreshToken();
         Task<TokenModel> CreateToken(WebSiteUser user, List<string> roles, List<Claim>? Internalclaims = null);
-        Task<LogInReturn> RefreshToken(string refreshToken);
+        public Task<LogInReturn> RefreshToken(string refreshToken, string token);
         Task<bool> RevokeToken(string refreshToken);
     }
 }

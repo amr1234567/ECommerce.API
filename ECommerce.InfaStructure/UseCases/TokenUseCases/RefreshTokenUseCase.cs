@@ -17,9 +17,9 @@ namespace ECommerce.InfaStructure.UseCases.TokenUseCases
             _tokenService = tokenService;
         }
 
-        public async Task<LogInReturn> Execute(string token)
+        public async Task<LogInReturn> Execute(string refreshtoken, string token)
         {
-            return await _tokenService.RefreshToken(token);
+            return await _tokenService.RefreshToken(refreshtoken, token);
         }
     }
 }

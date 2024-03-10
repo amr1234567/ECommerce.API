@@ -18,7 +18,7 @@ namespace ECommerce.Core.Entities.Identity
         public DateTime CreatedOn { get; set; }
         public DateTime? RevokedOn { get; set; }
 
-        public bool IsActive => RevokedOn != null && !IsExpired;
+        public bool IsActive => RevokedOn == null && !IsExpired;
 
     }
 }

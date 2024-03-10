@@ -45,7 +45,7 @@ namespace ECommerce.InfaStructure.Services
 
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Value.Key));
 
-            var ExpierdOn = DateTime.Now.AddMinutes(_config.Value.expirePeriodInMinuts);
+            var ExpierdOn = DateTime.UtcNow.AddMinutes(_config.Value.expirePeriodInMinuts);
 
             var SecurityToken = new JwtSecurityToken(
                 issuer: _config.Value.issuer,
@@ -58,7 +58,7 @@ namespace ECommerce.InfaStructure.Services
             return Task.FromResult(new TokenModel
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(SecurityToken),
-                CreatedOn = DateTime.Now,
+                CreatedOn = DateTime.UtcNow,
                 ExpiredOn = ExpierdOn
             });
         }
@@ -73,19 +73,31 @@ namespace ECommerce.InfaStructure.Services
             return new RefreshToken
             {
                 CreatedOn = DateTime.UtcNow,
-                ExpiredOn = DateTime.UtcNow.AddDays(_config.Value.RefreshExpiredPeriodInDays),
+                ExpiredOn = DateTime.UtcNow.AddMinutes(1),// AddDays(_config.Value.RefreshExpiredPeriodInDays),
                 Token = Convert.ToBase64String(randomNumber)
             };
         }
 
-        public async Task<LogInReturn> RefreshToken(string refreshToken)
+        public async Task<LogInReturn> RefreshToken(string refreshToken, string token)
         {
-            var response = new LogInReturn();
+            if (token is null || string.IsNullOrEmpty(token) ||
+                refreshToken is null || string.IsNullOrEmpty(refreshToken))
+            {
+                return new LogInReturn { IsLoggedIn = false, Message = "Invalid Token Or RefreshToken" };
+            }
 
+            var principal = GetPrincipalFromExpiredToken(token);
+
+            if (principal == null)
+            {
+                return new LogInReturn { IsLoggedIn = false, Message = "Invalid Token Or RefreshToken" };
+            }
+
+            var response = new LogInReturn();
             var revokeCurrentToken = await RevokeToken(refreshToken);
             if (!revokeCurrentToken)
             {
-                response.Message = "Invalid Token";
+                response.Message = "Invalid Token Or RefreshToken";
                 return response;
             }
 
@@ -103,7 +115,7 @@ namespace ECommerce.InfaStructure.Services
 
 
             var roles = await _userManager.GetRolesAsync(user);
-            var newToken = await CreateToken(user, roles.ToList());
+            var newToken = await CreateToken(user, roles.ToList(), principal.Claims.ToList());
             response.Token = newToken.Token;
             response.TokenExpiration = newToken.ExpiredOn;
 
@@ -131,6 +143,26 @@ namespace ECommerce.InfaStructure.Services
             await _userManager.UpdateAsync(user);
 
             return true;
+        }
+
+        private ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Value.Key)),
+                ValidateLifetime = false
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+            if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+
+            return principal;
+
         }
     }
 }

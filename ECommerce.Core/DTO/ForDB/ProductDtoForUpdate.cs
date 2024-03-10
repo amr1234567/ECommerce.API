@@ -30,7 +30,7 @@ namespace ECommerce.Core.DTO.ForDB
                 Description = Description,
                 CategoryId = CategoryId,
                 Picture = Picture,
-                Quentity = (int)Quentity
+                Quantity = (int)Quentity
             };
         }
         public void ToProductDto(Product product)
@@ -39,7 +39,7 @@ namespace ECommerce.Core.DTO.ForDB
             Description = product.Description;
             CategoryId = product.CategoryId;
             Picture = product.Picture;
-            Quentity = product.Quentity;
+            Quentity = product.Quantity;
         }
     }
 }

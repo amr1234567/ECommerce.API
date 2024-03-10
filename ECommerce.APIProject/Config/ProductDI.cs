@@ -22,12 +22,12 @@ namespace ECommerce.APIProject.Config
             services.AddScoped<IGetProductsByCategoryIdUseCase, GetProductsByCategoryIdUseCase>();
             services.AddScoped<IGetProductsByFiltersUseCase, GetProductsByFiltersUseCase>();
             services.AddScoped<IGetProductsUseCase, GetProductsUseCase>();
-            services.AddScoped<IMakeDiscountUseCase,MakeDescoundUseCase>();
-            services.AddScoped<IRemoveDescoundUseCase,RemoveDiscountUseCase>();
+            services.AddScoped<IMakeDiscountUseCase, MakeDiscountUseCase>();
+            services.AddScoped<IRemoveDiscountUseCase, RemoveDiscountUseCase>();
 
             return services;
         }
 
-        
+
     }
 }

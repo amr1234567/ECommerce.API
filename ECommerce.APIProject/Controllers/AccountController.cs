@@ -9,6 +9,8 @@ using ECommerce.Core.Interfaces.IUseCases.ITokenUseCases;
 using ECommerce.InfaStructure.UseCases.AccountUseCases;
 using ECommerce.InfaStructure.UseCases.TokenUseCases;
 using Ganss.Xss;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -79,12 +81,13 @@ namespace ECommerce.APIProject.Controllers
         [HttpPost("refreshtoken")]
         public async Task<ActionResult<LogInReturn>> RefreshToken(string? refreshToken = null)
         {
-            var token = refreshToken ?? Request.Cookies["RefreshToken"];
+            var RefreshToken = refreshToken ?? Request.Cookies["RefreshToken"];
+            var token = await HttpContext.GetTokenAsync(JwtBearerDefaults.AuthenticationScheme, "access_token");
 
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(RefreshToken))
                 return Unauthorized(new LogInReturn { Message = "Bad Token" });
 
-            var response = await _refreshToken.Execute(token);
+            var response = await _refreshToken.Execute(RefreshToken, token);
 
             if (!response.IsLoggedIn)
                 return Ok(response);

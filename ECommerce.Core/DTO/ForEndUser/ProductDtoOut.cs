@@ -35,11 +35,11 @@ namespace ECommerce.Core.DTO.ForEndUser
             Description = product.Description;
             CategoryId = product.CategoryId;
             Picture = product.Picture;
-            Quentity = product.Quentity;
-            Discound = product.Discound;
+            Quentity = product.Quantity;
+            Discound = product.Discount;
             OriginalPrice = product.OriginalPrice;
             Price = product.Price;
-            
+
         }
     }
 }
